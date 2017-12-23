@@ -4,8 +4,8 @@
 # HIGH = no rain, LOW = rain detected
 # Buzzer on GPIO13
 from time import sleep
-from gpiozero import Buzzer, InputDevice
-
+from gpiozero import  InputDevice
+import os
 
 no_rain = InputDevice(18)
  
@@ -37,8 +37,24 @@ while True:
         elif rain_count>60:
             now_rain_level=3
 
+
+
+
         if now_rain_level != prv_rain_level:
             print("message")
+            if now_rain_level==0:
+                os.system("curl -X POST  https://rest.nexmo.com/sms/json \-d api_key=f88e06bd \-d api_secret=a2ef00734f879756 \-d to=886978711793 \-d from=\"NEXMO\" \-d text=\"目前沒有下雨\"")
+            elif now_rain_level==1: 
+                os.system("curl -X POST  https://rest.nexmo.com/sms/json \-d api_key=f88e06bd \-d api_secret=a2ef00734f879756 \-d to=886978711793 \-d from=\"NEXMO\" \-d text=\"目前下小雨\"")
+
+            elif now_rain_level==2:
+                os.system("curl -X POST  https://rest.nexmo.com/sms/json \-d api_key=f88e06bd \-d api_secret=a2ef00734f879756 \-d to=886978711793 \-d from=\"NEXMO\" \-d text=\"目前下雨中等 需要帶雨具\"")
+            
+            elif now_rain_level==3:       
+                os.system("curl -X POST  https://rest.nexmo.com/sms/json \-d api_key=f88e06bd \-d api_secret=a2ef00734f879756 \-d to=886978711793 \-d from=\"NEXMO\" \-d text=\"目前下雨很大 可以等待與停在出門\"")
+            else:
+                os.system("curl -X POST  https://rest.nexmo.com/sms/json \-d api_key=f88e06bd \-d api_secret=a2ef00734f879756 \-d to=886978711793 \-d from=\"NEXMO\" \-d text=\"程式錯誤請聯絡工程師\"")
+            prv_rain_level != now_rain_level
         else:
             pass   
         
